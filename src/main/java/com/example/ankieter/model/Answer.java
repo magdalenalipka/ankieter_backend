@@ -1,4 +1,4 @@
-package com.example.postgresdemo.model;
+package com.example.ankieter.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
@@ -8,18 +8,14 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "answers")
-public class Answer extends AuditModel {
+public abstract class Answer extends AuditModel {
     @Id
     @GeneratedValue(generator = "answer_generator")
-    @SequenceGenerator(
-            name = "answer_generator",
-            sequenceName = "answer_sequence",
-            initialValue = 1000
-    )
+    @SequenceGenerator(name = "answer_generator", sequenceName = "answer_sequence", initialValue = 1000)
     private Long id;
 
-    @Column(columnDefinition = "text")
-    private String text;
+    @Column(columnDefinition = "choice")
+    private int index;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "question_id", nullable = false)
@@ -35,12 +31,12 @@ public class Answer extends AuditModel {
         this.id = id;
     }
 
-    public String getText() {
-        return text;
+    public int getChoice() {
+        return this.index;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setChoice(int index) {
+        this.index = index;
     }
 
     public Question getQuestion() {

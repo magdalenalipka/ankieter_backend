@@ -1,6 +1,6 @@
-package com.example.postgresdemo.repository;
+package com.example.ankieter.repository;
 
-import com.example.postgresdemo.model.Answer;
+import com.example.ankieter.model.Answer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;

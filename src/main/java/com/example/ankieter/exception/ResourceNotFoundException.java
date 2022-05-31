@@ -1,4 +1,4 @@
-package com.example.postgresdemo.exception;
+package com.example.ankieter.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

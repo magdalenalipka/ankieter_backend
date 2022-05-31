@@ -1,4 +1,4 @@
-package com.example.postgresdemo.model;
+package com.example.ankieter.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -6,14 +6,10 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "questions")
-public class Question extends AuditModel {
+public abstract class Question extends AuditModel {
     @Id
     @GeneratedValue(generator = "question_generator")
-    @SequenceGenerator(
-            name = "question_generator",
-            sequenceName = "question_sequence",
-            initialValue = 1000
-    )
+    @SequenceGenerator(name = "question_generator", sequenceName = "question_sequence", initialValue = 1000)
     private Long id;
 
     @NotBlank

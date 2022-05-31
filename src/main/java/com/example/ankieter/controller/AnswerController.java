@@ -1,9 +1,10 @@
-package com.example.postgresdemo.controller;
+package com.example.ankieter.controller;
 
-import com.example.postgresdemo.exception.ResourceNotFoundException;
-import com.example.postgresdemo.model.Answer;
-import com.example.postgresdemo.repository.AnswerRepository;
-import com.example.postgresdemo.repository.QuestionRepository;
+import com.example.ankieter.exception.ResourceNotFoundException;
+import com.example.ankieter.model.Answer;
+import com.example.ankieter.repository.AnswerRepository;
+import com.example.ankieter.repository.QuestionRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class AnswerController {
 
     @PostMapping("/questions/{questionId}/answers")
     public Answer addAnswer(@PathVariable Long questionId,
-                            @Valid @RequestBody Answer answer) {
+            @Valid @RequestBody Answer answer) {
         return questionRepository.findById(questionId)
                 .map(question -> {
                     answer.setQuestion(question);
@@ -36,9 +37,9 @@ public class AnswerController {
 
     @PutMapping("/questions/{questionId}/answers/{answerId}")
     public Answer updateAnswer(@PathVariable Long questionId,
-                               @PathVariable Long answerId,
-                               @Valid @RequestBody Answer answerRequest) {
-        if(!questionRepository.existsById(questionId)) {
+            @PathVariable Long answerId,
+            @Valid @RequestBody Answer answerRequest) {
+        if (!questionRepository.existsById(questionId)) {
             throw new ResourceNotFoundException("Question not found with id " + questionId);
         }
 
@@ -51,8 +52,8 @@ public class AnswerController {
 
     @DeleteMapping("/questions/{questionId}/answers/{answerId}")
     public ResponseEntity<?> deleteAnswer(@PathVariable Long questionId,
-                                          @PathVariable Long answerId) {
-        if(!questionRepository.existsById(questionId)) {
+            @PathVariable Long answerId) {
+        if (!questionRepository.existsById(questionId)) {
             throw new ResourceNotFoundException("Question not found with id " + questionId);
         }
 

@@ -1,8 +1,9 @@
-package com.example.postgresdemo.controller;
+package com.example.ankieter.controller;
 
-import com.example.postgresdemo.exception.ResourceNotFoundException;
-import com.example.postgresdemo.model.Question;
-import com.example.postgresdemo.repository.QuestionRepository;
+import com.example.ankieter.exception.ResourceNotFoundException;
+import com.example.ankieter.model.Question;
+import com.example.ankieter.repository.QuestionRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +22,6 @@ public class QuestionController {
         return questionRepository.findAll(pageable);
     }
 
-
     @PostMapping("/questions")
     public Question createQuestion(@Valid @RequestBody Question question) {
         return questionRepository.save(question);
@@ -29,7 +29,7 @@ public class QuestionController {
 
     @PutMapping("/questions/{questionId}")
     public Question updateQuestion(@PathVariable Long questionId,
-                                   @Valid @RequestBody Question questionRequest) {
+            @Valid @RequestBody Question questionRequest) {
         return questionRepository.findById(questionId)
                 .map(question -> {
                     question.setTitle(questionRequest.getTitle());
@@ -37,7 +37,6 @@ public class QuestionController {
                     return questionRepository.save(question);
                 }).orElseThrow(() -> new ResourceNotFoundException("Question not found with id " + questionId));
     }
-
 
     @DeleteMapping("/questions/{questionId}")
     public ResponseEntity<?> deleteQuestion(@PathVariable Long questionId) {

@@ -1,4 +1,4 @@
-package com.example.postgresdemo;
+package com.example.ankieter;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
