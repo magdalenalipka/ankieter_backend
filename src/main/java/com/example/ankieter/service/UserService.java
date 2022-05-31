@@ -1,5 +1,6 @@
 package com.example.ankieter.service;
 
+import com.example.ankieter.exception.ResourceNotFoundException;
 import com.example.ankieter.model.User;
 import com.example.ankieter.repository.UserRepository;
 
@@ -14,7 +15,7 @@ public class UserService implements IUserService {
 
   @Override
   public User findByNick(String nick) {
-    var user = (User) repository.findByNick(nick);
-    return user;
+    var user = repository.findById(nick);
+    return user.orElseThrow(() -> new ResourceNotFoundException("User not found with id " + nick));
   }
 }
