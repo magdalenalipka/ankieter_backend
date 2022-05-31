@@ -3,6 +3,8 @@ heroku:
  only:
  - master
  script:
+ - git config --global user.email "magdalenalipka@int.pl"
+ - git config --global user.name "Magdalena Lipka"
  - git commit -m "$CI_COMMIT_MESSAGE"
  - git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/ankiety-io-projekt.git
  - git push -f heroku master
