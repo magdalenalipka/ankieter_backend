@@ -14,8 +14,8 @@ public abstract class Answer extends AuditModel {
     @SequenceGenerator(name = "answer_generator", sequenceName = "answer_sequence", initialValue = 1000)
     private Long id;
 
-    @Column(columnDefinition = "choice")
-    private int index;
+    @Column(name = "choice_index", columnDefinition = "int")
+    private int choiceIndex;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "question_id", nullable = false)
@@ -32,11 +32,11 @@ public abstract class Answer extends AuditModel {
     }
 
     public int getChoice() {
-        return this.index;
+        return this.choiceIndex;
     }
 
     public void setChoice(int index) {
-        this.index = index;
+        this.choiceIndex = index;
     }
 
     public Question getQuestion() {
