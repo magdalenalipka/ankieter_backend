@@ -35,20 +35,22 @@ public class AnswerController {
                 }).orElseThrow(() -> new ResourceNotFoundException("Question not found with id " + questionId));
     }
 
-    @PutMapping("/questions/{questionId}/answers/{answerId}")
-    public Answer updateAnswer(@PathVariable Long questionId,
-            @PathVariable Long answerId,
-            @Valid @RequestBody Answer answerRequest) {
-        if (!questionRepository.existsById(questionId)) {
-            throw new ResourceNotFoundException("Question not found with id " + questionId);
-        }
+    // @PutMapping("/questions/{questionId}/answers/{answerId}")
+    // public Answer updateAnswer(@PathVariable Long questionId,
+    // @PathVariable Long answerId,
+    // @Valid @RequestBody Answer answerRequest) {
+    // if (!questionRepository.existsById(questionId)) {
+    // throw new ResourceNotFoundException("Question not found with id " +
+    // questionId);
+    // }
 
-        return answerRepository.findById(answerId)
-                .map(answer -> {
-                    answer.setText(answerRequest.getText());
-                    return answerRepository.save(answer);
-                }).orElseThrow(() -> new ResourceNotFoundException("Answer not found with id " + answerId));
-    }
+    // return answerRepository.findById(answerId)
+    // .map(answer -> {
+    // answer.setText(answerRequest.getText());
+    // return answerRepository.save(answer);
+    // }).orElseThrow(() -> new ResourceNotFoundException("Answer not found with id
+    // " + answerId));
+    // }
 
     @DeleteMapping("/questions/{questionId}/answers/{answerId}")
     public ResponseEntity<?> deleteAnswer(@PathVariable Long questionId,
