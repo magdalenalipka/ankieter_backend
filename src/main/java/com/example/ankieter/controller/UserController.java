@@ -45,6 +45,27 @@ public class UserController {
     return ResponseEntity.ok(savedUser);
   }
 
+  @RequestMapping(value = "/users", method = RequestMethod.OPTIONS)
+  public ResponseEntity checkUser(@RequestHeader("Authorization") String auth) {
+    String base64Credentials = auth.substring("Basic".length()).trim();
+    byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
+    String credentials = new String(credDecoded, StandardCharsets.UTF_8);
+    // credentials = username:password
+    final String[] values = credentials.split(":", 2);
+
+    Optional<User> user = userRepository.findById(values[0]);
+
+    if (!user.isPresent()) {
+      throw new NotFoundException("User with nick " + values[0] + " does not exist");
+    }
+
+    if (!user.get().checkPassword(values[1])) {
+      throw new UnauthorizedException("Incorrect password");
+    }
+
+    return ResponseEntity.ok().build();
+  }
+
   @DeleteMapping("/users")
   public ResponseEntity<?> deleteAnswer(@RequestHeader("Authorization") String auth) {
 
