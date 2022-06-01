@@ -1,8 +1,8 @@
 package com.example.ankieter.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 
@@ -19,7 +19,8 @@ public abstract class Answer extends AuditModel {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "question_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+
     @JsonIgnore
     private Question question;
 

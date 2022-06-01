@@ -1,6 +1,7 @@
 package com.example.ankieter.controller;
 
 import com.example.ankieter.exception.ConflictException;
+import com.example.ankieter.model.Form;
 import com.example.ankieter.model.User;
 import com.example.ankieter.repository.UserRepository;
 
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -33,5 +35,13 @@ public class UserController {
 
     userRepository.deleteById(nick);
     return ResponseEntity.ok().build();
+  }
+
+  @GetMapping("/users/{nick}/forms")
+  public List<Form> getUserForms(@PathVariable String nick) {
+    // TODO: password verify
+    // List<Form> = userRepository.findById(nick).get().getForms();
+    // return ;
+    return null;
   }
 }
