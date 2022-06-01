@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.hibernate.annotations.Cascade;
 
+import java.util.Date;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -22,6 +24,21 @@ public class Form extends AuditModel {
 
   @Column(columnDefinition = "text")
   private String description;
+
+  // if null then there is no lock date
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(name = "lock_date", nullable = true, updatable = false)
+  private Date lockDate;
+
+  @Column(columnDefinition = "boolean")
+  private Boolean locked;
+
+  // if password is defined then form is password protected
+  @Column(columnDefinition = "text")
+  private String password;
+
+  @Column(columnDefinition = "boolean", name = "answers_locked")
+  private Boolean answersLocked;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "user_id", nullable = false)
