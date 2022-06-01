@@ -23,25 +23,26 @@ public class UserController {
   private UserRepository userRepository;
 
   @PostMapping("/users")
-  public User addUser(@RequestHeader("Authorization") String auth) {
+  public ResponseEntity addUser(@RequestHeader("Authorization") String auth) {
 
     String base64Credentials = auth.substring("Basic".length()).trim();
     byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
     String credentials = new String(credDecoded, StandardCharsets.UTF_8);
     // credentials = username:password
-    final String[] values = credentials.split(":", 2);
+    String[] values = credentials.split(":", 2);
 
     Optional<User> conflictUser = userRepository.findById(values[0]);
-    if (conflictUser != null) {
-      throw new ConflictException("User with nick " + values[0] + " already exists");
+    if (conflictUser.isPresent()) {
+      return ResponseEntity.badRequest().body("This nick is taken.");
     }
 
     User newUser = new User();
     newUser.setNick(values[0]);
     newUser.setPassword(values[1]);
 
-    return userRepository.save(newUser);
+    User savedUser = userRepository.save(newUser);
 
+    return ResponseEntity.ok(savedUser);
   }
 
   @DeleteMapping("/users")
