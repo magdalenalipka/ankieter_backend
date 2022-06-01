@@ -1,7 +1,5 @@
 package com.example.ankieter.controller;
 
-import com.example.ankieter.exception.NotFoundException;
-import com.example.ankieter.exception.UnauthorizedException;
 import com.example.ankieter.model.Form;
 import com.example.ankieter.model.User;
 import com.example.ankieter.repository.UserRepository;
@@ -32,7 +30,7 @@ public class UserController {
 
     Optional<User> conflictUser = userRepository.findById(values[0]);
     if (conflictUser.isPresent()) {
-      return ResponseEntity.badRequest().body("This nick is taken.");
+      return ResponseEntity.status(409).body("This nick is taken.");
     }
 
     User newUser = new User();
@@ -46,20 +44,11 @@ public class UserController {
 
   @RequestMapping(value = "/users", method = RequestMethod.OPTIONS)
   public ResponseEntity checkUser(@RequestHeader("Authorization") String auth) {
-    String base64Credentials = auth.substring("Basic".length()).trim();
-    byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
-    String credentials = new String(credDecoded, StandardCharsets.UTF_8);
-    // credentials = username:password
-    final String[] values = credentials.split(":", 2);
 
-    Optional<User> user = userRepository.findById(values[0]);
+    User user = userRepository.getUserFromAuth(auth);
 
-    if (!user.isPresent()) {
-      throw new NotFoundException("User with nick " + values[0] + " does not exist");
-    }
-
-    if (!user.get().checkPassword(values[1])) {
-      throw new UnauthorizedException("Incorrect password");
+    if (user == null) {
+      return ResponseEntity.status(403).build();
     }
 
     return ResponseEntity.ok().build();
@@ -67,24 +56,12 @@ public class UserController {
 
   @DeleteMapping("/users")
   public ResponseEntity<?> deleteAnswer(@RequestHeader("Authorization") String auth) {
-
-    String base64Credentials = auth.substring("Basic".length()).trim();
-    byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
-    String credentials = new String(credDecoded, StandardCharsets.UTF_8);
-    // credentials = username:password
-    final String[] values = credentials.split(":", 2);
-
-    Optional<User> user = userRepository.findById(values[0]);
-
-    if (!user.isPresent()) {
-      throw new NotFoundException("User with nick " + values[0] + " does not exist");
+    User user = userRepository.getUserFromAuth(auth);
+    if (user == null) {
+      return ResponseEntity.status(403).build();
     }
 
-    if (!user.get().checkPassword(values[1])) {
-      throw new UnauthorizedException("Incorrect password");
-    }
-
-    userRepository.delete(user.get());
+    userRepository.delete(user);
 
     return ResponseEntity.ok().build();
   }
