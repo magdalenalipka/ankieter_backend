@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "forms")
-public abstract class Form extends AuditModel {
+public class Form extends AuditModel {
   @Id
   @GeneratedValue(generator = "form_generator")
   @SequenceGenerator(name = "form_generator", sequenceName = "form_generator", initialValue = 1000)

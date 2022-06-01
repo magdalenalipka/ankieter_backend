@@ -15,9 +15,9 @@ public class UserService implements IUserService {
   @Autowired
   private UserRepository repository;
 
-  @Override
   public User findByNick(String nick) {
     Optional<User> user = repository.findById(nick);
     return user.orElseThrow(() -> new ResourceNotFoundException("User not found with id " + nick));
   }
+
 }

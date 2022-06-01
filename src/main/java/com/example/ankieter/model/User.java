@@ -10,7 +10,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "users")
-public abstract class User extends AuditModel {
+public class User extends AuditModel {
     @Id
     private String nick;
 

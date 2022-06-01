@@ -1,0 +1,60 @@
+openapi: 3.0.0
+
+info:
+  title: Ankieter backend
+  version: "0.1"
+  description: Ankieter backend API
+
+tags:
+  - name: users
+  - name: forms
+
+paths:
+  /users:
+    parameters:
+      - name: Authorization
+        in: header
+        description: Bearer token
+        required: true
+        schema:
+          type: string
+    post:
+      tags:
+        - users
+      summary: Register new user
+      responses:
+        '201':
+          description: User has been registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '409':
+          description: Nick already taken
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - users
+      summary: Delete user
+      responses:
+        '204':
+          description: User has been deleted
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'  
+  
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        nick:
+          type: string
+    Error:
+      type: object

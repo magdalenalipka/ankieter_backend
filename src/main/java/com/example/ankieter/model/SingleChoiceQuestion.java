@@ -4,8 +4,7 @@ import com.google.gson.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "questions")
-public abstract class SingleChoiceQuestion extends Question {
+public class SingleChoiceQuestion extends Question {
 
     @Column(name = "answers")
     private String answers; // json z tablicą odpowiedzi
