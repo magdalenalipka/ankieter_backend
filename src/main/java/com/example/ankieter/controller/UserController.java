@@ -7,6 +7,9 @@ import com.example.ankieter.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 @RestController
@@ -17,7 +20,7 @@ public class UserController {
 
   @PostMapping("/users")
   public User addUser(@Valid @RequestBody User user) {
-    var conflictUser = userRepository.findById(user.getNick());
+    Optional<User> conflictUser = userRepository.findById(user.getNick());
     if (conflictUser != null) {
       throw new ConflictException("User with nick " + user.getNick() + " already exists");
     }
