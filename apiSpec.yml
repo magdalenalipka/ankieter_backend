@@ -14,10 +14,11 @@ paths:
     parameters:
       - name: Authorization
         in: header
-        description: Bearer token
+        description: Basic Authorization
         required: true
         schema:
           type: string
+          format: BasicAuth
     post:
       tags:
         - users
@@ -47,10 +48,43 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'  
+                $ref: '#/components/schemas/Error'
+  /forms:
+    parameters:
+      - name: Authorization
+        in: header
+        description: Basic Authorization
+        required: true
+        schema:
+          type: string
+          format: BasicAuth
+    post:
+      tags:
+        - forms
+      summary: Create new form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormInput'
+      responses:
+        '201':
+          description: Form has been created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Form'
+        '403':
+          description: User is not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   
 components:
   schemas:
+    Error:
+      type: object
     User:
       type: object
       properties:
@@ -58,5 +92,51 @@ components:
           type: string
         createdAt:
           type: string
-    Error:
+    FormInput:
       type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionInput'
+    QuestionInput:
+      type: object
+      properties:
+        title:
+          type: string
+        type:
+          type: string
+        answers:
+          type: array
+          items:
+            type: string
+    Form:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+    Question:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        type:
+          type: string
+        answers:
+          type: array
+          items:
+            type: string
