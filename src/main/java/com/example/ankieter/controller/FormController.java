@@ -1,6 +1,7 @@
 package com.example.ankieter.controller;
 
 import com.example.ankieter.model.Form;
+import com.example.ankieter.model.FormInput;
 import com.example.ankieter.model.User;
 import com.example.ankieter.repository.FormRepository;
 import com.example.ankieter.repository.UserRepository;
@@ -25,13 +26,15 @@ public class FormController {
 
   @PostMapping("/forms")
   public ResponseEntity addForm(@RequestHeader("Authorization") String auth, @RequestHeader("Origin") String origin,
-      @RequestBody Form form) {
+      @RequestBody FormInput formInput) {
 
     User user = userRepository.getUserFromAuth(auth);
 
     if (user == null) {
       return ResponseEntity.status(403).headers(new Headers(origin)).build();
     }
+
+    // System.out.println();
 
     // TODO: implement
     // vallidate
@@ -48,6 +51,8 @@ public class FormController {
   public ResponseEntity getPublicForms(@RequestHeader("Origin") String origin) {
 
     List<Form> forms = formRepository.getAllPublicForms();
+
+    System.out.println(forms.toArray().length);
 
     return ResponseEntity.ok().headers(new Headers(origin)).body(forms);
   }
@@ -78,7 +83,7 @@ public class FormController {
       return ResponseEntity.status(403).headers(new Headers(origin)).build();
     }
 
-    List<Form> forms = user.getForms();
+    List<Form> forms = formRepository.getUserForms(user.getId());
 
     return ResponseEntity.ok().headers(new Headers(origin)).body(forms);
   }

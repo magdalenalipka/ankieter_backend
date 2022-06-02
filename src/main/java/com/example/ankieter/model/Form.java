@@ -1,9 +1,5 @@
 package com.example.ankieter.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import org.hibernate.annotations.Cascade;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -11,10 +7,6 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "forms")
 public class Form extends AuditModel {
-  @Id
-  @GeneratedValue(generator = "form_generator")
-  @SequenceGenerator(name = "form_generator", sequenceName = "form_generator", initialValue = 1000)
-  private Long id;
 
   @NotBlank
   @Size(min = 3, max = 100)
@@ -28,24 +20,13 @@ public class Form extends AuditModel {
 
   // if password is defined then form is password protected
   @Column(columnDefinition = "text")
-  private String password;
+  private String password = null;
 
   @Column(columnDefinition = "boolean", name = "answers_locked")
   private Boolean answersLocked;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "user_id", nullable = false)
-  @Cascade(org.hibernate.annotations.CascadeType.ALL)
-  @JsonIgnore
-  private User user;
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
+  @Column(columnDefinition = "text", name = "user_id")
+  private String userId;
 
   public String getTitle() {
     return title;
@@ -61,6 +42,34 @@ public class Form extends AuditModel {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public Boolean getLocked() {
+    return this.locked;
+  }
+
+  public void setLocked(Boolean locked) {
+    this.locked = locked;
+  }
+
+  public Boolean getAnswersLocked() {
+    return this.answersLocked;
+  }
+
+  public void setAnswersLocked(Boolean answersLocked) {
+    this.answersLocked = answersLocked;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public String getUserId() {
+    return this.userId;
+  }
+
+  public void setUserId(String userId) {
+    this.userId = userId;
   }
 
 }

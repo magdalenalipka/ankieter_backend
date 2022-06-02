@@ -50,15 +50,28 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
   /forms:
-    parameters:
-      - name: Authorization
-        in: header
-        description: Basic Authorization
-        required: true
-        schema:
-          type: string
-          format: BasicAuth
+    get:
+      tags:
+        - forms
+      summary: Get all public forms
+      responses:
+        '200':
+          description: Forms have been returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Form'
     post:
+      parameters:
+        - name: Authorization
+          in: header
+          description: Basic Authorization
+          required: true
+          schema:
+            type: string
+            format: BasicAuth
       tags:
         - forms
       summary: Create new form
@@ -80,6 +93,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /users/forms:
+    parameters:
+    - name: Authorization
+      in: header
+      description: Basic Authorization
+      required: true
+      schema:
+        type: string
+        format: BasicAuth
+    get:
+      tags:
+        - forms
+      summary: Get all forms created by user
+      responses:
+        '200':
+          description: Forms have been returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Form'
   
 components:
   schemas:
@@ -88,7 +123,7 @@ components:
     User:
       type: object
       properties:
-        nick:
+        id:
           type: string
         createdAt:
           type: string

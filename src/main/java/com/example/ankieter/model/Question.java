@@ -1,5 +1,6 @@
 package com.example.ankieter.model;
 
+import com.google.gson.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -7,11 +8,6 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "questions")
 public abstract class Question extends AuditModel {
-    @Id
-    @GeneratedValue(generator = "question_generator")
-    @SequenceGenerator(name = "question_generator", sequenceName = "question_sequence", initialValue = 1000)
-    private Long id;
-
     @NotBlank
     @Size(min = 3, max = 100)
     private String title;
@@ -23,13 +19,12 @@ public abstract class Question extends AuditModel {
     @Column(columnDefinition = "text")
     protected String type;
 
-    public Long getId() {
-        return id;
-    }
+    @NotBlank
+    @Column(name = "form_id", columnDefinition = "text")
+    protected String formId;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(name = "answers")
+    private String answers; // json z tablicą odpowiedzi
 
     public String getTitle() {
         return this.title;
@@ -50,4 +45,21 @@ public abstract class Question extends AuditModel {
     public String getType() {
         return this.type;
     }
+
+    public void setAnswers(String[] answers) {
+        this.answers = new Gson().toJson(answers);
+    }
+
+    public String[] getAnswers() {
+        return new Gson().fromJson(answers, String[].class);
+    }
+
+    public String getFormId() {
+        return this.formId;
+    }
+
+    public void setFormId(String formId) {
+        this.formId = formId;
+    }
+
 }

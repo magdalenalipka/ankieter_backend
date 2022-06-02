@@ -38,7 +38,7 @@ public class UserController {
     }
 
     User newUser = new User();
-    newUser.setNick(values[0]);
+    newUser.setId(values[0]);
     newUser.setPassword(values[1]);
 
     User savedUser = userRepository.save(newUser);
@@ -56,8 +56,6 @@ public class UserController {
     if (user == null) {
       return ResponseEntity.status(403).headers(new Headers(origin)).build();
     }
-
-    System.out.print(user.getNick());
 
     return ResponseEntity.ok().headers(new Headers(origin)).build();
   }
