@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "answers")
@@ -14,15 +15,15 @@ public abstract class Answer extends AuditModel {
     @SequenceGenerator(name = "answer_generator", sequenceName = "answer_sequence", initialValue = 1000)
     private Long id;
 
-    @Column(name = "choice_index", columnDefinition = "int")
-    private int choiceIndex;
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "question_id", nullable = false)
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
-
     @JsonIgnore
     private Question question;
+
+    @NotBlank
+    @Column(columnDefinition = "text")
+    protected String type;
 
     public Long getId() {
         return id;
@@ -32,19 +33,15 @@ public abstract class Answer extends AuditModel {
         this.id = id;
     }
 
-    public int getChoice() {
-        return this.choiceIndex;
-    }
-
-    public void setChoice(int index) {
-        this.choiceIndex = index;
-    }
-
     public Question getQuestion() {
         return question;
     }
 
     public void setQuestion(Question question) {
         this.question = question;
+    }
+
+    public String getType() {
+        return this.type;
     }
 }

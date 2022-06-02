@@ -4,10 +4,10 @@ import com.google.gson.*;
 import javax.persistence.*;
 
 @Entity
-public class SingleChoiceQuestion extends Question {
+public class MultiChoiceQuestion extends Question {
 
-    SingleChoiceQuestion() {
-        this.type = "singleChoice";
+    MultiChoiceQuestion() {
+        this.type = "multiChoice";
     }
 
     @Column(name = "answers")
@@ -21,7 +21,4 @@ public class SingleChoiceQuestion extends Question {
         this.answers = new Gson().toJson(answers);
     }
 
-    public String getType() {
-        return this.type;
-    }
 }

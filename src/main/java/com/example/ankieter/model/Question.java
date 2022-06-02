@@ -19,6 +19,10 @@ public abstract class Question extends AuditModel {
     @Column(columnDefinition = "text")
     private String description;
 
+    @NotBlank
+    @Column(columnDefinition = "text")
+    protected String type;
+
     public Long getId() {
         return id;
     }
@@ -28,7 +32,7 @@ public abstract class Question extends AuditModel {
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public void setTitle(String title) {
@@ -36,10 +40,14 @@ public abstract class Question extends AuditModel {
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getType() {
+        return this.type;
     }
 }
