@@ -25,11 +25,6 @@ public class Form extends AuditModel {
   @Column(columnDefinition = "text")
   private String description;
 
-  // if null then there is no lock date
-  @Temporal(TemporalType.TIMESTAMP)
-  @Column(name = "lock_date", nullable = true, updatable = false)
-  private Date lockDate;
-
   @Column(columnDefinition = "boolean")
   private Boolean locked;
 

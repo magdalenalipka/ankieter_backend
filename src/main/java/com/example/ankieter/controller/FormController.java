@@ -1,104 +1,85 @@
 package com.example.ankieter.controller;
 
-import com.example.ankieter.exception.NotFoundException;
-import com.example.ankieter.exception.UnauthorizedException;
 import com.example.ankieter.model.Form;
 import com.example.ankieter.model.User;
 import com.example.ankieter.repository.FormRepository;
 import com.example.ankieter.repository.UserRepository;
+import com.example.ankieter.utilities.Headers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.List;
-import java.util.Optional;
 
+@CrossOrigin(methods = { RequestMethod.DELETE, RequestMethod.GET, RequestMethod.OPTIONS,
+    RequestMethod.POST }, allowedHeaders = "*")
 @RestController
 public class FormController {
 
   @Autowired
   private FormRepository formRepository;
 
-  // @PostMapping("/forms")
-  // public ResponseEntity addForm(@RequestHeader("Authorization") String auth) {
+  @Autowired
+  private UserRepository userRepository;
 
-  // String base64Credentials = auth.substring("Basic".length()).trim();
-  // byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
-  // String credentials = new String(credDecoded, StandardCharsets.UTF_8);
-  // // credentials = username:password
-  // String[] values = credentials.split(":", 2);
+  @PostMapping("/forms")
+  public ResponseEntity addForm(@RequestHeader("Authorization") String auth, @RequestHeader("Origin") String origin,
+      @RequestBody Form form) {
 
-  // Optional<User> conflictUser = userRepository.findById(values[0]);
-  // if (conflictUser.isPresent()) {
-  // return ResponseEntity.badRequest().body("This nick is taken.");
-  // }
+    User user = userRepository.getUserFromAuth(auth);
 
-  // User newUser = new User();
-  // newUser.setNick(values[0]);
-  // newUser.setPassword(values[1]);
+    if (user == null) {
+      return ResponseEntity.status(403).headers(new Headers(origin)).build();
+    }
 
-  // User savedUser = userRepository.save(newUser);
+    // TODO: implement
+    // vallidate
+    // save
+    // map over questions
+    // - save
+    // - map over answers
+    // -- save
 
-  // return ResponseEntity.ok(savedUser);
-  // }
+    return ResponseEntity.ok().headers(new Headers(origin)).build();
+  }
 
-  // @RequestMapping(value = "/users", method = RequestMethod.OPTIONS)
-  // public ResponseEntity checkUser(@RequestHeader("Authorization") String auth)
-  // {
-  // String base64Credentials = auth.substring("Basic".length()).trim();
-  // byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
-  // String credentials = new String(credDecoded, StandardCharsets.UTF_8);
-  // // credentials = username:password
-  // final String[] values = credentials.split(":", 2);
+  @GetMapping("/forms")
+  public ResponseEntity getPublicForms(@RequestHeader("Origin") String origin) {
 
-  // Optional<User> user = userRepository.findById(values[0]);
+    List<Form> forms = formRepository.getAllPublicForms();
 
-  // if (!user.isPresent()) {
-  // throw new NotFoundException("User with nick " + values[0] + " does not
-  // exist");
-  // }
+    return ResponseEntity.ok().headers(new Headers(origin)).body(forms);
+  }
 
-  // if (!user.get().checkPassword(values[1])) {
-  // throw new UnauthorizedException("Incorrect password");
-  // }
+  @DeleteMapping("/forms/{form_id}")
+  public ResponseEntity<?> deleteForm(@RequestHeader("Authorization") String auth,
+      @RequestHeader("Origin") String origin, @PathVariable("form_id") String formId) {
 
-  // return ResponseEntity.ok().build();
-  // }
+    User user = userRepository.getUserFromAuth(auth);
 
-  // @DeleteMapping("/users")
-  // public ResponseEntity<?> deleteAnswer(@RequestHeader("Authorization") String
-  // auth) {
+    if (user == null) {
+      return ResponseEntity.status(403).headers(new Headers(origin)).build();
+    }
 
-  // String base64Credentials = auth.substring("Basic".length()).trim();
-  // byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
-  // String credentials = new String(credDecoded, StandardCharsets.UTF_8);
-  // // credentials = username:password
-  // final String[] values = credentials.split(":", 2);
+    Form form = formRepository.getById(formId);
+    formRepository.delete(form);
 
-  // Optional<User> user = userRepository.findById(values[0]);
+    return ResponseEntity.status(204).headers(new Headers(origin)).build();
+  }
 
-  // if (!user.isPresent()) {
-  // throw new NotFoundException("User with nick " + values[0] + " does not
-  // exist");
-  // }
+  @GetMapping("/users/forms")
+  public ResponseEntity getUserForms(@RequestHeader("Authorization") String auth,
+      @RequestHeader("Origin") String origin) {
 
-  // if (!user.get().checkPassword(values[1])) {
-  // throw new UnauthorizedException("Incorrect password");
-  // }
+    User user = userRepository.getUserFromAuth(auth);
 
-  // userRepository.delete(user.get());
+    if (user == null) {
+      return ResponseEntity.status(403).headers(new Headers(origin)).build();
+    }
 
-  // return ResponseEntity.ok().build();
-  // }
+    List<Form> forms = user.getForms();
 
-  // @GetMapping("/users/{nick}/forms")
-  // public List<Form> getUserForms(@PathVariable String nick) {
-  // // TODO: password verify
-  // // List<Form> = userRepository.findById(nick).get().getForms();
-  // // return ;
-  // return null;
-  // }
+    return ResponseEntity.ok().headers(new Headers(origin)).body(forms);
+  }
 }

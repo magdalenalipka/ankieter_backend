@@ -38,4 +38,8 @@ public class User extends AuditModel {
         this.password = password.hashCode();
     }
 
+    public List<Form> getForms() {
+        return this.forms;
+    }
+
 }
