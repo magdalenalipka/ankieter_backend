@@ -1,5 +1,6 @@
 package com.example.ankieter.model;
 
+import static java.util.stream.Collectors.toList;
 import java.util.List;
 
 public class FormInput {
@@ -35,7 +36,7 @@ public class FormInput {
   }
 
   public List<Question> getQuestions(String formId) {
-    List<Question> questions = this.questions.stream().map(question -> question.getQuestion(formId)).toList();
+    List<Question> questions = this.questions.stream().map(question -> question.getQuestion(formId)).collect(toList());
     return questions;
   }
 
