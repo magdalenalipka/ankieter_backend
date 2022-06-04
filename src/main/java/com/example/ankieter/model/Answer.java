@@ -7,6 +7,9 @@ import javax.validation.constraints.NotBlank;
 @Table(name = "answers")
 public abstract class Answer extends AuditModel {
 
+    @Column(columnDefinition = "text", name = "answer_set_id")
+    private String answerSetId;
+
     @Column(columnDefinition = "text", name = "question_id")
     private String questionId;
 

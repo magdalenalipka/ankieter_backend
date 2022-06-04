@@ -2,8 +2,10 @@ package com.example.ankieter.controller;
 
 import com.example.ankieter.model.Form;
 import com.example.ankieter.model.FormInput;
+import com.example.ankieter.model.QuestionInput;
 import com.example.ankieter.model.User;
 import com.example.ankieter.repository.FormRepository;
+import com.example.ankieter.repository.QuestionRepository;
 import com.example.ankieter.repository.UserRepository;
 import com.example.ankieter.utilities.Headers;
 
@@ -20,9 +22,10 @@ public class FormController {
 
   @Autowired
   private FormRepository formRepository;
-
   @Autowired
   private UserRepository userRepository;
+  @Autowired
+  QuestionRepository questionRepository;
 
   @PostMapping("/forms")
   public ResponseEntity addForm(@RequestHeader("Authorization") String auth, @RequestHeader("Origin") String origin,
@@ -34,15 +37,21 @@ public class FormController {
       return ResponseEntity.status(403).headers(new Headers(origin)).build();
     }
 
-    // System.out.println();
+    if (!formInput.valid()) {
+      return ResponseEntity.status(400).headers(new Headers(origin)).build();
+    }
 
-    // TODO: implement
-    // vallidate
-    // save
-    // map over questions
-    // - save
-    // - map over answers
-    // -- save
+    for (QuestionInput question : formInput.questions) {
+      if (!question.valid()) {
+        return ResponseEntity.status(400).headers(new Headers(origin)).build();
+
+      }
+    }
+
+    Form form = formInput.getForm(user.getId());
+    formRepository.save(form);
+
+    formInput.getQuestions(form.getId()).stream().map(question -> questionRepository.save(question));
 
     return ResponseEntity.ok().headers(new Headers(origin)).build();
   }
@@ -52,9 +61,21 @@ public class FormController {
 
     List<Form> forms = formRepository.getAllPublicForms();
 
-    System.out.println(forms.toArray().length);
-
     return ResponseEntity.ok().headers(new Headers(origin)).body(forms);
+  }
+
+  @PatchMapping("/forms/{form_id}")
+  public ResponseEntity updateForm(@RequestHeader("Authorization") String auth,
+      @RequestHeader("Origin") String origin, @PathVariable("form_id") String formId) {
+    User user = userRepository.getUserFromAuth(auth);
+
+    if (user == null) {
+      return ResponseEntity.status(403).headers(new Headers(origin)).build();
+    }
+
+    Form form = formRepository.getById(formId);
+    // TODO
+    return ResponseEntity.status(200).headers(new Headers(origin)).build();
   }
 
   @DeleteMapping("/forms/{form_id}")
@@ -68,6 +89,11 @@ public class FormController {
     }
 
     Form form = formRepository.getById(formId);
+
+    if (form.getUserId() != user.getId()) {
+      return ResponseEntity.status(403).headers(new Headers(origin)).build();
+    }
+
     formRepository.delete(form);
 
     return ResponseEntity.status(204).headers(new Headers(origin)).build();

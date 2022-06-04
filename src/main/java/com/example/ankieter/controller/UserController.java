@@ -25,7 +25,6 @@ public class UserController {
   @PostMapping("/users")
   public ResponseEntity addUser(@RequestHeader("Authorization") String auth, @RequestHeader("Origin") String origin) {
 
-    System.out.println(origin);
     String base64Credentials = auth.substring("Basic".length()).trim();
     byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
     String credentials = new String(credDecoded, StandardCharsets.UTF_8);
@@ -48,8 +47,6 @@ public class UserController {
 
   @RequestMapping(value = "/users", method = RequestMethod.OPTIONS)
   public ResponseEntity checkUser(@RequestHeader("Authorization") String auth, @RequestHeader("Origin") String origin) {
-
-    System.out.println(origin);
 
     User user = userRepository.getUserFromAuth(auth);
 
