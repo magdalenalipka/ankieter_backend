@@ -93,6 +93,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /forms/{form_id}:
+    patch:
+      parameters:
+        - name: Authorization
+          in: header
+          description: Basic Authorization
+          required: true
+          schema:
+            type: string
+            format: BasicAuth
+      tags:
+        - forms
+      summary: Update form
+      responses:
+        '200':
+          description: Form have been updated
+        '403':
+          description: User is not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /users/forms:
     parameters:
     - name: Authorization

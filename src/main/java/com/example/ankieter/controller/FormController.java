@@ -2,6 +2,7 @@ package com.example.ankieter.controller;
 
 import com.example.ankieter.model.Form;
 import com.example.ankieter.model.FormInput;
+import com.example.ankieter.model.FormUpdateInput;
 import com.example.ankieter.model.QuestionInput;
 import com.example.ankieter.model.User;
 import com.example.ankieter.repository.FormRepository;
@@ -16,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 @CrossOrigin(methods = { RequestMethod.DELETE, RequestMethod.GET, RequestMethod.OPTIONS,
-    RequestMethod.POST }, allowedHeaders = "*")
+    RequestMethod.POST, RequestMethod.PATCH }, allowedHeaders = "*")
 @RestController
 public class FormController {
 
@@ -66,7 +67,8 @@ public class FormController {
 
   @PatchMapping("/forms/{form_id}")
   public ResponseEntity updateForm(@RequestHeader("Authorization") String auth,
-      @RequestHeader("Origin") String origin, @PathVariable("form_id") String formId) {
+      @RequestHeader("Origin") String origin, @PathVariable("form_id") String formId,
+      @RequestBody FormUpdateInput formInput) {
     User user = userRepository.getUserFromAuth(auth);
 
     if (user == null) {
@@ -74,7 +76,25 @@ public class FormController {
     }
 
     Form form = formRepository.getById(formId);
-    // TODO
+    if (!form.getUserId().equals(user.getId())) {
+      return ResponseEntity.status(403).headers(new Headers(origin)).build();
+    }
+
+    if (formInput.answersLocked != null) {
+      form.setAnswersLocked(formInput.answersLocked);
+    }
+    if (formInput.locked != null) {
+      form.setLocked(formInput.locked);
+    }
+    if (formInput.description != null) {
+      form.setDescription(formInput.description.length() != 0 ? formInput.description : null);
+    }
+    if (formInput.password != null) {
+      form.setPassword(formInput.password.length() != 0 ? formInput.password : null);
+    }
+
+    formRepository.save(form);
+
     return ResponseEntity.status(200).headers(new Headers(origin)).build();
   }
 
@@ -90,7 +110,7 @@ public class FormController {
 
     Form form = formRepository.getById(formId);
 
-    if (form.getUserId() != user.getId()) {
+    if (!form.getUserId().equals(user.getId())) {
       return ResponseEntity.status(403).headers(new Headers(origin)).build();
     }
 
