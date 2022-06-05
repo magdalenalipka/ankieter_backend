@@ -20,4 +20,13 @@ public abstract class Answer extends AuditModel {
     public String getType() {
         return this.type;
     }
+
+    public String getAnswerSetId() {
+        return this.answerSetId;
+    }
+
+    public void setAnswerSetId(String answerSetId) {
+        this.answerSetId = answerSetId;
+    }
+
 }

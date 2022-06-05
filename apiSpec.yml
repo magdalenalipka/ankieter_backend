@@ -8,7 +8,8 @@ info:
 tags:
   - name: users
   - name: forms
-
+  - name: answers
+  
 paths:
   /users:
     parameters:
@@ -115,6 +116,35 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /forms/{form_id}/answers:
+    post:
+      tags:
+        - answers
+      summary: Add new answer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnswerInput'
+      responses:
+        '201':
+          description: Answer has been added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Empty'
+        '403':
+          description: User is not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Form not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /users/forms:
     parameters:
     - name: Authorization
@@ -141,6 +171,8 @@ paths:
 components:
   schemas:
     Error:
+      type: object
+    Empty:
       type: object
     User:
       type: object
@@ -197,3 +229,22 @@ components:
           type: array
           items:
             type: string
+    AnswerInput:
+      type: object
+      properties:
+        answers:
+          type: array
+          items:
+            type: object
+            properties:
+              questionId:
+                type: string
+              choiceIndex:
+                type: string
+                description: for single choice questions
+              choiceIndices:
+                type: array
+                items:
+                  type: string
+                  description: for multiple choice questions
+              

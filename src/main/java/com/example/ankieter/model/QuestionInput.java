@@ -5,6 +5,7 @@ public class QuestionInput {
   public String type;
   public String title;
   public String description;
+  public boolean required;
   public String[] answers;
 
   public boolean valid() {
@@ -40,6 +41,7 @@ public class QuestionInput {
     question.setTitle(title);
     question.setAnswers(answers);
     question.setFormId(formId);
+    question.setRequired(required);
 
     return question;
   }
