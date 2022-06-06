@@ -24,7 +24,7 @@ public class Headers extends HttpHeaders {
     this.add("Access-Control-Allow-Headers", "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token");
     this.add("Access-Control-Allow-Methods", "*");
     this.add("Content-Type", "application/json");
-    this.add("Access-Control-Allow-Origin", origin);
+    // this.add("Access-Control-Allow-Origin", origin);
     this.add("Access-Control-Expose-Headers",
         "Access-Control-Allow-Headers, Access-Control-Allow-Methods, Access-Control-Allow-Origin, Content-Type");
     this.add("Access-Control-Allow-Credentials", "true");
