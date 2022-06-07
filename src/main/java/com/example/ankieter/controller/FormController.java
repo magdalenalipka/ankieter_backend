@@ -78,8 +78,7 @@ public class FormController {
   }
 
   @RequestMapping(value = "/forms/{form_id}", method = RequestMethod.OPTIONS)
-  public ResponseEntity addFormOptions(@RequestHeader("Authorization") String auth,
-      @RequestHeader("Origin") String origin, @PathVariable("form_id") String formId) {
+  public ResponseEntity getFormOptions(@RequestHeader("Origin") String origin, @PathVariable("form_id") String formId) {
     return ResponseEntity.ok().headers(new Headers(origin)).build();
   }
 
