@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @CrossOrigin(methods = { RequestMethod.DELETE, RequestMethod.GET, RequestMethod.OPTIONS,
     RequestMethod.POST, RequestMethod.PATCH }, allowedHeaders = "*")
@@ -60,7 +62,11 @@ public class FormController {
     Form form = formInput.getForm(user.getId());
     formRepository.save(form);
 
-    formInput.getQuestions(form.getId()).stream().map(question -> questionRepository.save(question));
+    System.out.println("Will save " + formInput.questions.toArray().length + " questions.");
+
+    for (Question question : formInput.getQuestions(form.getId())) {
+      questionRepository.save(question);
+    }
 
     return ResponseEntity.ok().headers(new Headers(origin)).build();
   }
@@ -88,11 +94,24 @@ public class FormController {
       return ResponseEntity.status(404).headers(new Headers(origin)).build();
     }
 
-    List<Question> questions = questionRepository.getFormQuestions(formId);
+    List<Question> questions = Stream
+        .concat(questionRepository.getFormQuestions(formId, "singleChoice").stream(),
+            questionRepository.getFormQuestions(formId, "multiChoice").stream())
+        .collect(Collectors.toList());
+
+    System.out.println("Got questions.");
+
+    for (Question question : questions) {
+      System.out.println(question.getTitle());
+      System.out.println(question.getType());
+      System.out.println();
+    }
+
+    System.out.println("Printed questions");
 
     FormResponse response = new FormResponse();
     response.detail = form;
-    response.questions = questions;
+    // response.questions = questions;
 
     return ResponseEntity.status(200).headers(new Headers(origin)).body(response);
   }
