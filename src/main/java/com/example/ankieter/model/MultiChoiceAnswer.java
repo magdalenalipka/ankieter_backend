@@ -1,5 +1,12 @@
 package com.example.ankieter.model;
 
+import com.google.gson.*;
+
+import java.util.Arrays;
+import static java.util.stream.Collectors.toList;
+
+import java.util.ArrayList;
+
 import javax.persistence.*;
 
 @Entity
@@ -17,8 +24,14 @@ public class MultiChoiceAnswer extends Answer {
     }
 
     public void setChoice(int[] indices) {
-        // TODO: implement stringify
-        this.choiceIndices = "[]";
+
+        ArrayList<String> choice = new ArrayList<String>(indices.length);
+
+        for (int index : indices) {
+            choice.add(Integer.toString(index));
+        }
+
+        this.choiceIndices = new Gson().toJson(choice);
     }
 
     public String getType() {

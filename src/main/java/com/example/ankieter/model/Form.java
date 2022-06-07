@@ -45,7 +45,7 @@ public class Form extends AuditModel {
   }
 
   public Boolean getLocked() {
-    return this.locked;
+    return this.locked == null ? false : this.locked;
   }
 
   public void setLocked(Boolean locked) {
@@ -53,7 +53,7 @@ public class Form extends AuditModel {
   }
 
   public Boolean getAnswersLocked() {
-    return this.answersLocked;
+    return this.answersLocked == null ? false : this.answersLocked;
   }
 
   public void setAnswersLocked(Boolean answersLocked) {

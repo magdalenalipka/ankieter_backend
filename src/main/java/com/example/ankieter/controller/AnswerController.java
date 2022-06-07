@@ -44,20 +44,20 @@ public class AnswerController {
   public ResponseEntity addForm(@PathVariable(name = "form_id") String formId, @RequestHeader("Origin") String origin,
       @RequestBody AnswerSetInput answerSetInput, @RequestParam(name = "password") String password) {
 
-    if (!answerSetInput.authorized(formId, password)) {
+    if (!answerSetInput.authorized(formId, password, formRepository)) {
       return ResponseEntity.status(403).headers(new Headers(origin)).build();
     }
-    if (!answerSetInput.valid(formId)) {
+    if (!answerSetInput.valid(formId, formRepository, questionRepository)) {
       return ResponseEntity.status(400).headers(new Headers(origin)).build();
     }
 
     for (AnswerInput answerInput : answerSetInput.answers) {
-      if (!answerInput.valid(formId)) {
+      if (!answerInput.valid(formId, questionRepository)) {
         return ResponseEntity.status(400).headers(new Headers(origin)).build();
       }
     }
 
-    List<Answer> answers = answerSetInput.getAnswers();
+    List<Answer> answers = answerSetInput.getAnswers(questionRepository);
 
     for (Answer answer : answers) {
       answerRepository.save(answer);

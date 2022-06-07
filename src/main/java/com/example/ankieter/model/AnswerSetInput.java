@@ -8,8 +8,6 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.example.ankieter.repository.FormRepository;
 import com.example.ankieter.repository.QuestionRepository;
 
@@ -21,12 +19,7 @@ public class AnswerSetInput {
     this.id = UUID.randomUUID().toString();
   }
 
-  @Autowired
-  FormRepository formRepository;
-  @Autowired
-  QuestionRepository questionRepository;
-
-  public boolean authorized(String formId, String password) {
+  public boolean authorized(String formId, String password, FormRepository formRepository) {
     Form form = formRepository.getById(formId);
 
     if (form.isPasswordProtected() && !form.checkPassword(password)) {
@@ -36,7 +29,7 @@ public class AnswerSetInput {
     return true;
   }
 
-  public boolean valid(String formId) {
+  public boolean valid(String formId, FormRepository formRepository, QuestionRepository questionRepository) {
 
     Form form = formRepository.getById(formId);
 
@@ -62,8 +55,9 @@ public class AnswerSetInput {
     return true;
   }
 
-  public List<Answer> getAnswers() {
-    return Arrays.asList(this.answers).stream().map(answerInput -> answerInput.getAnswer(this.id)).collect(toList());
+  public List<Answer> getAnswers(QuestionRepository questionRepository) {
+    return Arrays.asList(this.answers).stream().map(answerInput -> answerInput.getAnswer(this.id, questionRepository))
+        .collect(toList());
   }
 
 }

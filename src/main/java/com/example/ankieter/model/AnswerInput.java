@@ -2,8 +2,6 @@ package com.example.ankieter.model;
 
 import java.util.Arrays;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.example.ankieter.repository.QuestionRepository;
 
 public class AnswerInput extends AuditModel {
@@ -11,10 +9,7 @@ public class AnswerInput extends AuditModel {
   public String choiceIndex;
   public String[] choiceIndices;
 
-  @Autowired
-  QuestionRepository questionRepository;
-
-  public boolean valid(String formId) {
+  public boolean valid(String formId, QuestionRepository questionRepository) {
     if (this.choiceIndex != null && this.choiceIndices != null) {
       return false;
     }
@@ -24,11 +19,11 @@ public class AnswerInput extends AuditModel {
       return false;
     }
 
-    if (question.type.equals("singleChoice")
+    if (question.getType().equals("singleChoice")
         && (this.choiceIndex == null || Integer.parseInt(this.choiceIndex) >= question.getAnswers().length)) {
       return false;
     }
-    if (question.type.equals("multiChoice")) {
+    if (question.getType().equals("multiChoice")) {
       if (this.choiceIndices == null) {
         return false;
       }
@@ -42,7 +37,7 @@ public class AnswerInput extends AuditModel {
     return true;
   }
 
-  public Answer getAnswer(String answerSetId) {
+  public Answer getAnswer(String answerSetId, QuestionRepository questionRepository) {
     Question question = questionRepository.getById(this.questionId);
 
     Answer answer;
@@ -51,8 +46,9 @@ public class AnswerInput extends AuditModel {
       ((SingleChoiceAnswer) answer).setChoice(Integer.parseInt(this.choiceIndex));
     } else if (question.getType().equals("multiChoice")) {
       answer = new MultiChoiceAnswer();
+      int[] choice = Arrays.asList(this.choiceIndices).stream().mapToInt(Integer::parseInt).toArray();
       ((MultiChoiceAnswer) answer)
-          .setChoice(Arrays.asList(this.choiceIndices).stream().mapToInt(Integer::parseInt).toArray());
+          .setChoice(choice);
     } else {
       return null;
     }

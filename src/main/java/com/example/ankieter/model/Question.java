@@ -27,7 +27,7 @@ public abstract class Question extends AuditModel {
     private String answers; // json z tablicą odpowiedzi
 
     @Column(name = "required", columnDefinition = "boolean")
-    private boolean required;
+    private Boolean required;
 
     public String getTitle() {
         return this.title;
@@ -49,8 +49,8 @@ public abstract class Question extends AuditModel {
         return this.type;
     }
 
-    public boolean getRequired() {
-        return this.required;
+    public Boolean getRequired() {
+        return this.required == null ? false : this.required;
     }
 
     public void setRequired(boolean required) {
