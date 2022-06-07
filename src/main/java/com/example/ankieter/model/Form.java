@@ -64,6 +64,10 @@ public class Form extends AuditModel {
     this.password = password;
   }
 
+  public String getPassword() {
+    return this.password;
+  }
+
   public boolean isPasswordProtected() {
     return this.password != null;
   }
