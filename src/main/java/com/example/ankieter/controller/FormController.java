@@ -62,8 +62,6 @@ public class FormController {
     Form form = formInput.getForm(user.getId());
     formRepository.save(form);
 
-    System.out.println("Will save " + formInput.questions.toArray().length + " questions.");
-
     for (Question question : formInput.getQuestions(form.getId())) {
       questionRepository.save(question);
     }
@@ -85,10 +83,10 @@ public class FormController {
     return ResponseEntity.ok().headers(new Headers(origin)).build();
   }
 
-  @GetMapping(value = "/forms/{form_id}", consumes = "application/json")
-  public ResponseEntity updateForm(@RequestHeader("Origin") String origin, @PathVariable("form_id") String formId) {
+  @GetMapping("/forms/{form_id}")
+  public ResponseEntity getForm(@RequestHeader("Origin") String origin, @PathVariable("form_id") String formId) {
 
-    Form form = formRepository.getById(formId);
+    Form form = formRepository.findById(formId).orElse(null);
 
     if (form == null) {
       return ResponseEntity.status(404).headers(new Headers(origin)).build();
@@ -99,21 +97,11 @@ public class FormController {
             questionRepository.getFormQuestions(formId, "multiChoice").stream())
         .collect(Collectors.toList());
 
-    System.out.println("Got questions.");
-
-    for (Question question : questions) {
-      System.out.println(question.getTitle());
-      System.out.println(question.getType());
-      System.out.println();
-    }
-
-    System.out.println("Printed questions");
-
     FormResponse response = new FormResponse();
     response.detail = form;
-    // response.questions = questions;
+    response.questions = questions;
 
-    return ResponseEntity.status(200).headers(new Headers(origin)).body(response);
+    return ResponseEntity.ok().headers(new Headers(origin)).body(response);
   }
 
   @PatchMapping(value = "/forms/{form_id}", consumes = "application/json")
