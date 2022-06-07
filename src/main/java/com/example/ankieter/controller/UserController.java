@@ -70,11 +70,4 @@ public class UserController {
     return ResponseEntity.ok().build();
   }
 
-  @GetMapping("/users/{nick}/forms")
-  public List<Form> getUserForms(@PathVariable String nick) {
-    // TODO: password verify
-    // List<Form> = userRepository.findById(nick).get().getForms();
-    // return ;
-    return null;
-  }
 }

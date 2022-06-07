@@ -95,6 +95,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
   /forms/{form_id}:
+    parameters:
+      - name: form_id
+        in: path
+        description: Form ID
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - forms
+      summary: Get form by ID
+      responses:
+        '200':
+          description: Form has been returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormResponse'
+        '404':
+          description: Form not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     patch:
       parameters:
         - name: Authorization
@@ -212,10 +236,6 @@ components:
           type: string
         description:
           type: string
-        questions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Question'
     Question:
       type: object
       properties:
@@ -247,4 +267,13 @@ components:
                 items:
                   type: string
                   description: for multiple choice questions
-              
+    FormResponse:
+      type: object
+      properties:
+        detail:
+          type: object
+          $ref: '#/components/schemas/Form'
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'

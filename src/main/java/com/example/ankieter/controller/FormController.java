@@ -2,7 +2,9 @@ package com.example.ankieter.controller;
 
 import com.example.ankieter.model.Form;
 import com.example.ankieter.model.FormInput;
+import com.example.ankieter.model.FormResponse;
 import com.example.ankieter.model.FormUpdateInput;
+import com.example.ankieter.model.Question;
 import com.example.ankieter.model.QuestionInput;
 import com.example.ankieter.model.User;
 import com.example.ankieter.repository.FormRepository;
@@ -28,7 +30,13 @@ public class FormController {
   @Autowired
   QuestionRepository questionRepository;
 
-  @PostMapping("/forms")
+  @RequestMapping(value = "/forms", method = RequestMethod.OPTIONS)
+  public ResponseEntity addFormOptions(@RequestHeader("Authorization") String auth,
+      @RequestHeader("Origin") String origin) {
+    return ResponseEntity.ok().headers(new Headers(origin)).build();
+  }
+
+  @PostMapping(value = "/forms", consumes = "application/json")
   public ResponseEntity addForm(@RequestHeader("Authorization") String auth, @RequestHeader("Origin") String origin,
       @RequestBody FormInput formInput) {
 
@@ -65,7 +73,31 @@ public class FormController {
     return ResponseEntity.ok().headers(new Headers(origin)).body(forms);
   }
 
-  @PatchMapping("/forms/{form_id}")
+  @RequestMapping(value = "/forms/{form_id}", method = RequestMethod.OPTIONS)
+  public ResponseEntity addFormOptions(@RequestHeader("Authorization") String auth,
+      @RequestHeader("Origin") String origin, @PathVariable("form_id") String formId) {
+    return ResponseEntity.ok().headers(new Headers(origin)).build();
+  }
+
+  @GetMapping(value = "/forms/{form_id}", consumes = "application/json")
+  public ResponseEntity updateForm(@RequestHeader("Origin") String origin, @PathVariable("form_id") String formId) {
+
+    Form form = formRepository.getById(formId);
+
+    if (form == null) {
+      return ResponseEntity.status(404).headers(new Headers(origin)).build();
+    }
+
+    List<Question> questions = questionRepository.getFormQuestions(formId);
+
+    FormResponse response = new FormResponse();
+    response.detail = form;
+    response.questions = questions;
+
+    return ResponseEntity.status(200).headers(new Headers(origin)).body(response);
+  }
+
+  @PatchMapping(value = "/forms/{form_id}", consumes = "application/json")
   public ResponseEntity updateForm(@RequestHeader("Authorization") String auth,
       @RequestHeader("Origin") String origin, @PathVariable("form_id") String formId,
       @RequestBody FormUpdateInput formInput) {
@@ -117,6 +149,12 @@ public class FormController {
     formRepository.delete(form);
 
     return ResponseEntity.status(204).headers(new Headers(origin)).build();
+  }
+
+  @RequestMapping(value = "/users/forms", method = RequestMethod.OPTIONS)
+  public ResponseEntity getUserFormsOptions(@RequestHeader("Authorization") String auth,
+      @RequestHeader("Origin") String origin) {
+    return ResponseEntity.ok().headers(new Headers(origin)).build();
   }
 
   @GetMapping("/users/forms")

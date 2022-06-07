@@ -34,7 +34,13 @@ public class AnswerController {
   @Autowired
   UserRepository userRepository;
 
-  @PostMapping("/forms/{form_id}/answers")
+  @RequestMapping(value = "/forms/{form_id}/answers", method = RequestMethod.OPTIONS)
+  public ResponseEntity addFormOptions(@RequestHeader("Authorization") String auth,
+      @RequestHeader("Origin") String origin, @PathVariable("form_id") String formId) {
+    return ResponseEntity.ok().headers(new Headers(origin)).build();
+  }
+
+  @PostMapping(value = "/forms/{form_id}/answers", consumes = "application/json")
   public ResponseEntity addForm(@PathVariable(name = "form_id") String formId, @RequestHeader("Origin") String origin,
       @RequestBody AnswerSetInput answerSetInput, @RequestParam(name = "password") String password) {
 
