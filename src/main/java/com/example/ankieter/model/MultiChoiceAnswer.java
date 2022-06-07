@@ -2,10 +2,8 @@ package com.example.ankieter.model;
 
 import com.google.gson.*;
 
-import java.util.Arrays;
-import static java.util.stream.Collectors.toList;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.persistence.*;
 
@@ -19,8 +17,9 @@ public class MultiChoiceAnswer extends Answer {
     @Column(name = "choice_indices", columnDefinition = "text")
     private String choiceIndices;
 
-    public String getChoice() {
-        return this.choiceIndices;
+    public int[] getChoice() {
+        return Arrays.asList(new Gson().fromJson(this.choiceIndices, String[].class)).stream().mapToInt(Integer::new)
+                .toArray();
     }
 
     public void setChoice(int[] indices) {

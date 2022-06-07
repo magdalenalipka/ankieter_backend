@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface AnswerRepository extends JpaRepository<Answer, String> {
-  @Query(value = "select * from answers where form_id = ?1", nativeQuery = true)
+  @Query(value = "select * from answers join questions on answers.question_id = questions.id where questions.form_id = ?1", nativeQuery = true)
   public List<Answer> getByFormId(String formId);
 }
