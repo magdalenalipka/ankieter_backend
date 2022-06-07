@@ -29,4 +29,12 @@ public abstract class Answer extends AuditModel {
         this.answerSetId = answerSetId;
     }
 
+    public String getQuestionId() {
+        return this.questionId;
+    }
+
+    public void setQuestionId(String questionId) {
+        this.questionId = questionId;
+    }
+
 }

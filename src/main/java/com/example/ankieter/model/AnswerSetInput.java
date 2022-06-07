@@ -34,9 +34,11 @@ public class AnswerSetInput {
     Form form = formRepository.getById(formId);
 
     if (form == null) {
+      System.out.println("missing form");
       return false;
     }
     if (form.getLocked()) {
+      System.out.println("form locked");
       return false;
     }
 
