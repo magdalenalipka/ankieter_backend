@@ -58,7 +58,10 @@ public class AnswerController {
     }
 
     List<Answer> answers = answerSetInput.getAnswers();
-    answers.stream().map(answer -> answerRepository.save(answer));
+
+    for (Answer answer : answers) {
+      answerRepository.save(answer);
+    }
 
     return ResponseEntity.ok().headers(new Headers(origin)).build();
   }
