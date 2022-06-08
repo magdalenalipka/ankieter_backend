@@ -20,6 +20,10 @@ public class FormInput {
       System.out.println("Invalid questions");
       return false;
     }
+    if (this.questions.toArray().length > 100) {
+      return false;
+    }
+
     return true;
   }
 

@@ -13,14 +13,15 @@ public class QuestionInput {
       System.out.println("Invalid question type");
       return false;
     }
-
     if (this.title == null || this.title.length() == 0) {
       System.out.println("Invalid question title");
       return false;
     }
-
     if (this.answers == null || this.answers.length == 0) {
       System.out.println("Invalid question answers");
+      return false;
+    }
+    if (this.answers.length > 10) {
       return false;
     }
 
