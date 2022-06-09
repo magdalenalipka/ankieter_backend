@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 @Table(name = "questions")
 public abstract class Question extends AuditModel {
     @NotBlank
-    @Size(min = 3, max = 100)
+    @Size(min = 1)
     private String title;
 
     @Column(columnDefinition = "text")
