@@ -9,37 +9,32 @@ public class AnswerInput extends AuditModel {
   public String choiceIndex;
   public String[] choiceIndices;
 
-  public boolean valid(String formId, QuestionRepository questionRepository) {
+  public String invalid(String formId, QuestionRepository questionRepository) {
     if (this.choiceIndex != null && this.choiceIndices != null) {
-      System.out.println("double choice");
-      return false;
+      return "Brak odpowiedzi na pytanie.";
     }
 
     Question question = questionRepository.getById(this.questionId);
     if (!question.getFormId().equals(formId)) {
-      System.out.println("wrong question id");
-      return false;
+      return "Pytanie nie należy do podanej ankiety.";
     }
 
     if (question.getType().equals("singleChoice")
         && (this.choiceIndex == null || Integer.parseInt(this.choiceIndex) >= question.getAnswers().length)) {
-      System.out.println("missing single");
-      return false;
+      return "Brak odpowiedzi na pytanie";
     }
     if (question.getType().equals("multiChoice")) {
       if (this.choiceIndices == null) {
-        System.out.println("missing multi");
-        return false;
+        return "Brak odpowiedzi na pytanie";
       }
       for (String choice : this.choiceIndices) {
         if (Integer.parseInt(choice) >= question.getAnswers().length) {
-          System.out.println("too big index");
-          return false;
+          return "Podana odpowiedź nie istnieje.";
         }
       }
     }
 
-    return true;
+    return null;
   }
 
   public Answer getAnswer(String answerSetId, QuestionRepository questionRepository) {

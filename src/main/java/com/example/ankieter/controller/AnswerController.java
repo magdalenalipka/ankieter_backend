@@ -47,13 +47,15 @@ public class AnswerController {
     if (!answerSetInput.authorized(formId, password, formRepository)) {
       return ResponseEntity.status(403).headers(new Headers(origin)).build();
     }
-    if (!answerSetInput.valid(formId, formRepository, questionRepository)) {
-      return ResponseEntity.status(400).headers(new Headers(origin)).build();
+    String answerSetInvalidReason = answerSetInput.invalid(formId, formRepository, questionRepository);
+    if (answerSetInvalidReason != null) {
+      return ResponseEntity.status(400).headers(new Headers(origin)).body(answerSetInvalidReason);
     }
 
     for (AnswerInput answerInput : answerSetInput.answers) {
-      if (!answerInput.valid(formId, questionRepository)) {
-        return ResponseEntity.status(400).headers(new Headers(origin)).build();
+      String answerInvalidReason = formId, questionRepository;
+      if (answerInvalidReason != null) {
+        return ResponseEntity.status(400).headers(new Headers(origin)).body(answerInvalidReason);
       }
     }
 

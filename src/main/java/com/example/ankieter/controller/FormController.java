@@ -48,13 +48,15 @@ public class FormController {
       return ResponseEntity.status(403).headers(new Headers(origin)).build();
     }
 
-    if (!formInput.valid()) {
-      return ResponseEntity.status(400).headers(new Headers(origin)).build();
+    String formInvalidReason = formInput.invalid();
+    if (formInvalidReason != null) {
+      return ResponseEntity.status(400).headers(new Headers(origin)).body(formInvalidReason);
     }
 
     for (QuestionInput question : formInput.questions) {
-      if (!question.valid()) {
-        return ResponseEntity.status(400).headers(new Headers(origin)).build();
+      String questionInvalidReason = question.invalid();
+      if (questionInvalidReason != null) {
+        return ResponseEntity.status(400).headers(new Headers(origin)).body(questionInvalidReason);
 
       }
     }

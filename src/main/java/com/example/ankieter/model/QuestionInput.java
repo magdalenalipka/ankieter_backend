@@ -8,24 +8,21 @@ public class QuestionInput {
   public boolean required;
   public String[] answers;
 
-  public boolean valid() {
+  public String invalid() {
     if (!this.type.equals("singleChoice") && !this.type.equals("multiChoice")) {
-      System.out.println("Invalid question type");
-      return false;
+      return "Nieobsługiwany typ pytania.";
     }
     if (this.title == null || this.title.length() == 0) {
-      System.out.println("Invalid question title");
-      return false;
+      return "Pytanie powinno mieć tytuł.";
     }
     if (this.answers == null || this.answers.length == 0) {
-      System.out.println("Invalid question answers");
-      return false;
+      return "Pytanie powinno mieć co najmniej jedną odpowiedź.";
     }
     if (this.answers.length > 10) {
-      return false;
+      return "Pytanie nie może mieć więcej niż 10 odpowiedzi.";
     }
 
-    return true;
+    return null;
   }
 
   public Question getQuestion(String formId) {

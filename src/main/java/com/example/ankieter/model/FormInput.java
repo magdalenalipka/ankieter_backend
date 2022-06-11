@@ -11,20 +11,18 @@ public class FormInput {
   public Boolean answersLocked;
   public List<QuestionInput> questions;
 
-  public boolean valid() {
+  public String invalid() {
     if (this.title == null || this.title.length() == 0) {
-      System.out.println("Invalid title");
-      return false;
+      return "Ankieta powinna mieć tytuł.";
     }
     if (this.questions == null || this.questions.toArray().length == 0) {
-      System.out.println("Invalid questions");
-      return false;
+      return "Ankieta powinna mieć co najmniej jedno pytanie.";
     }
     if (this.questions.toArray().length > 100) {
-      return false;
+      return "Ankieta nie może mieć więcej niż 100 pytań.";
     }
 
-    return true;
+    return null;
   }
 
   public Form getForm(String userId) {

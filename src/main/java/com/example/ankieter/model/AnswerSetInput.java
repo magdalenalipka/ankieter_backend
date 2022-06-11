@@ -29,17 +29,15 @@ public class AnswerSetInput {
     return true;
   }
 
-  public boolean valid(String formId, FormRepository formRepository, QuestionRepository questionRepository) {
+  public String invalid(String formId, FormRepository formRepository, QuestionRepository questionRepository) {
 
     Form form = formRepository.getById(formId);
 
     if (form == null) {
-      System.out.println("missing form");
-      return false;
+      return "Podana ankieta nie istnieje.";
     }
     if (form.getLocked()) {
-      System.out.println("form locked");
-      return false;
+      return "Ankieta aktualnie nie przyjmuje odpowiedzi.";
     }
 
     List<Question> requiredQuestions = Stream
@@ -50,11 +48,11 @@ public class AnswerSetInput {
     for (Question requiredQuestion : requiredQuestions) {
       if (Arrays.stream(this.answers).filter(answer -> answer.questionId.equals(requiredQuestion.getId()))
           .collect(toList()).toArray().length == 0) {
-        return false;
+        return "Pytanie nie należy do podanego formularza.";
       }
     }
 
-    return true;
+    return null;
   }
 
   public List<Answer> getAnswers(QuestionRepository questionRepository) {
