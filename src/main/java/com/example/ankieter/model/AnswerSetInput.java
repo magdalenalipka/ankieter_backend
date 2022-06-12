@@ -48,7 +48,7 @@ public class AnswerSetInput {
     for (Question requiredQuestion : requiredQuestions) {
       if (Arrays.stream(this.answers).filter(answer -> answer.questionId.equals(requiredQuestion.getId()))
           .collect(toList()).toArray().length == 0) {
-        return "Pytanie nie należy do podanego formularza.";
+        return "Brak odpowiedzi na wymagane pytanie.";
       }
     }
 
