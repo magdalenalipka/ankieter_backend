@@ -53,7 +53,7 @@ public class AnswerController {
     }
 
     for (AnswerInput answerInput : answerSetInput.answers) {
-      String answerInvalidReason = formId, questionRepository;
+      String answerInvalidReason = answerInput.invalid(formId, questionRepository);
       if (answerInvalidReason != null) {
         return ResponseEntity.status(400).headers(new Headers(origin)).body(answerInvalidReason);
       }
