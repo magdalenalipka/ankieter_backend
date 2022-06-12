@@ -1,5 +1,5 @@
 # Ankieter
-Aplikacja do przeprowadzania ankiet stworzona w ramach przedmiotu Inżynieria Oprogramownia w semestrze letnim 2021/2022 na Uniwersytecie Jagiellońskim.
+Aplikacja do przeprowadzania ankiet stworzona w ramach przedmiotu Inżynieria Oprogramownia w semestrze letnim 2021/2022 na Uniwersytecie Jagiellońskim. Działająca wersja online aplikacji dostępna jest [tutaj](https://ankieter-frontend.vercel.app/).
 
 ### Autorzy:
 - Blagoja Mladenov
@@ -10,9 +10,13 @@ Aplikacja do przeprowadzania ankiet stworzona w ramach przedmiotu Inżynieria Op
 
 # Instrukcja obsługi
 
-Aplikacja składa się z dwóch częsci składowych wymagających osobnych kompilacji.
+Aplikacja składa się z dwóch części składowych wymagających osobnych kompilacji.
 
 ## Backend
+
+### Beta
+
+Wersja beta backendu aplikacji dostępna jest pod linkiem [https://ankiety-io-projekt.herokuapp.com](https://ankiety-io-projekt.herokuapp.com).  Do wykonywania zapytań wymagany jest dedykowany klient typu Postman. 
 
 Backend napisany jest w frameworku Spring Boot i wymaga zainstalowanych narzędzi [Maven](https://maven.apache.org/) oraz [JDK](https://www.oracle.com/java/technologies/downloads/) do kompilacji. Minimalna wymagana wersja to Java 17.
 
@@ -68,6 +72,9 @@ java -jar target/ankieter-0.0.1-SNAPSHOT.jar
 Aplikacja domyślnie uruchamia serwer HTTP na porcie `8080`.
 
 ## Frontend
+
+### Beta
+Wersja beta frontend aplikacji dostępna jest pod linkiem [https://ankieter-frontend.vercel.app/](https://ankieter-frontend.vercel.app/). Aplikację należy uruchomić w przeglądarce internetowej.
 
 Frontend napisany jest we frameworku [Next.js](https://nextjs.org/) i wymaga zainstalowanego menedżera paczek [NPM](https://www.npmjs.com/) oraz środowiska [Node.js](https://www.npmjs.com/). Wymagane wersje to Node.js 17 oraz NPM 8.
 
